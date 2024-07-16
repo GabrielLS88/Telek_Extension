@@ -1,0 +1,63 @@
+.extension-dialog {
+  background-color: #1968F0;
+  padding: 1rem;
+  position: fixed;
+  top:2vh;
+  right: 20vh;
+  width: 20rem;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 9999;
+}
+
+.blockButton{
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.extension-dialog h1 {
+  font-size: 1.3rem;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.extension-dialog input[type="text"]{
+  width: 95%;
+  height: 2rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border:none;
+  border-radius: 5px;
+  color: black;
+  background-color: white;
+}
+
+.extension-dialog button {
+  margin-top: 1rem;
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #f2f2f2;
+}
+
+.extension-dialog button {
+  cursor: pointer;
+  color: black;
+}
+
+.extension-dialog button:hover {
+  background-color: #e0e0e0;
+}
+
+.extension-dialog input[type="text"]:focus,
+.extension-dialog button:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+}
