@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="PT-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dialog</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const contract_id = "telek";
+        const token_router = "Key dGVsZWtyb3V0ZXI6alBxTDBocjNOc3kwZVdwYVFINVU=";
+
+        async function fazerRequisicaoInicial(identity) {
+            try {
+                const response = await axios.post(`https://${contract_id}.http.msging.net/commands`, {
+                    id: '{{$guid}}',
+                    to: 'postmaster@builder.msging.net',
+                    method: 'get',
+                    uri: `/contexts/${identity}@wa.gw.msging.net`
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': token_router
+                    }
+                });
+
+                return response.data;
+            } catch (error) {
+                console.error('Erro ao fazer a requisição inicial:', error);
+                throw error;
+            }
+        }
+
+        async function deletarVariaveis(identity, items) {
+            try {
+                for (const variable of items) {
+                    await axios.post(`https://${contract_id}.http.msging.net/commands`, {
+                        id: '{{$guid}}',
+                        to: 'postmaster@builder.msging.net',
+                        method: 'delete',
+                        uri: `/contexts/${identity}@wa.gw.msging.net/${variable}`
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token_router
+                        }
+                    });
+                    console.log(`Variável ${variable} deletada com sucesso.`);
+                }
+            } catch (error) {
+                console.error('Erro ao deletar variáveis:', error);
+                throw error;
+            }
+        }
+
+        async function main() {
+            const identity = document.getElementById('numberUser').value;
+            if (!identity) {
+                alert("Por favor, insira um número.");
+                return;
+            }
+            try {
+                const response = await fazerRequisicaoInicial(identity);
+                const variaveis = response.resource.items;
+                await deletarVariaveis(identity, variaveis);
+                alert("Contexto zerado com sucesso!");
+            } catch (error) {
+                console.error('Erro:', error);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Qual o número que você deseja zerar o contexto?</h1>
+    <input type="text" id="numberUser" placeholder="Qual o número?">
+    <div id="blockButton">
+        <button id="zerarButton" onclick="main()">Zerar</button>
+    </div>
+</body>
+
+</html>

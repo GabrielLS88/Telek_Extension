@@ -1,15 +1,16 @@
 .extension-dialog {
-  background-color: #1968F0;
+  background-color: #302f2f;
   padding: 1rem;
   position: fixed;
   top:2vh;
   right: 20vh;
   width: 20rem;
   height: auto;
-  border: 1px solid #ccc;
+  border: 0px;
   border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   z-index: 9999;
+  text-align: center;
+  transition: 0.3s ease-in-out;
 }
 
 .blockButton{
@@ -23,41 +24,40 @@
 .extension-dialog h1 {
   font-size: 1.3rem;
   color: white;
-  margin-bottom: 0.5rem;
 }
 
 .extension-dialog input[type="text"]{
   width: 95%;
-  height: 2rem;
+  height: 3rem;
   padding: 0.5rem;
   font-size: 1rem;
   border:none;
   border-radius: 5px;
   color: black;
   background-color: white;
+  text-align: center;
+  margin-top: 0.3rem;
 }
 
 .extension-dialog button {
-  margin-top: 1rem;
+  width: 95%;
+  height: 3rem;
+  margin-top: 0.2rem;
   padding: 8px 12px;
   font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  background-color: #f2f2f2;
-}
-
-.extension-dialog button {
+  border-radius: 5px;
+  background-color: #0b3174;
+  color: rgb(173, 173, 173);
+  outline: none;
+  transition: 0.3s ease-in-out;
   cursor: pointer;
-  color: black;
+  border: 0;
+  margin-top: 0.5rem;
 }
 
 .extension-dialog button:hover {
-  background-color: #e0e0e0;
-}
-
-.extension-dialog input[type="text"]:focus,
-.extension-dialog button:focus {
-  outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.5);
+  width: 95%;
+  height: 3rem;
+  background-color: #1968F0;
+  color: white;
 }

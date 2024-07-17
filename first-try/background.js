@@ -10,40 +10,57 @@ async function getCurrentTab() {
   return tab;
 }
 
-async function openDialog() {
+async function fetchBodyHtml() {
+  const response = await fetch(chrome.runtime.getURL('body.html'));
+  return await response.text();
+}
+
+async function openDialog(tabId) {
+  const htmlContent = await fetchBodyHtml();
+
   chrome.scripting.insertCSS({
-    target: { tabId: (await getCurrentTab()).id },
-    files: ['focus-mode.css']
+    target: { tabId: tabId },
+    files: ['phoneUser.css']
   });
 
   chrome.scripting.executeScript({
-    target: { tabId: (await getCurrentTab()).id },
-    function: () => {
+    target: { tabId: tabId },
+    func: (htmlContent) => {
       let dialogDiv = document.createElement('div');
       dialogDiv.id = 'extensionDialog';
       dialogDiv.classList.add('extension-dialog');
-      dialogDiv.innerHTML = `
-        <h1>Qual o número que você deseja zerar o contexto?</h1>
-        <input type="text" id="numberUser" placeholder="Qual o número?">
-        <div id="blockButton">
-        <button id="zerarButton">Zerar</button>
-        <button id="cancelarButton">Cancelar</button>
-        </div>
-      `;
-      
+      dialogDiv.innerHTML = htmlContent;
       document.body.appendChild(dialogDiv);
-    }
+
+      // Adiciona o listener de clique para fechar o popup
+      const closeOnClickOutside = (event) => {
+        if (!dialogDiv.contains(event.target)) {
+          dialogDiv.remove();
+          chrome.action.setBadgeText({
+            tabId: tabId,
+            text: 'OFF'
+          });
+          document.removeEventListener('click', closeOnClickOutside);
+        }
+      };
+      document.addEventListener('click', closeOnClickOutside);
+    },
+    args: [htmlContent]
   });
 }
 
-async function closeDialog() {
+async function closeDialog(tabId) {
   chrome.scripting.executeScript({
-    target: { tabId: (await getCurrentTab()).id },
-    function: () => {
+    target: { tabId: tabId },
+    func: () => {
       let dialogDiv = document.getElementById('extensionDialog');
       if (dialogDiv) {
         dialogDiv.remove();
       }
+      chrome.action.setBadgeText({
+        tabId: tabId,
+        text: 'OFF'
+      });
     }
   });
 }
@@ -53,9 +70,9 @@ chrome.action.onClicked.addListener(async (tab) => {
   const nextState = prevState === 'ON' ? 'OFF' : 'ON';
 
   if (nextState === 'ON') {
-    await openDialog();
+    await openDialog(tab.id);
   } else if (nextState === 'OFF') {
-    await closeDialog();
+    await closeDialog(tab.id);
   }
 
   await chrome.action.setBadgeText({
